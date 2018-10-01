@@ -1,4 +1,4 @@
-// include the library code:
+// Incluir las librerias del LCD y de temporizadores
 #include <LiquidCrystal.h>
 #include <DueTimer.h>
  
@@ -75,7 +75,6 @@ lcd.print("Press");
 }
  
 void loop() {
-
 // Se pone el cursor en la columna0 y la fila 1 del lcd  
   lcd.setCursor(0, 1);
 //Se imprime por LCD el numero de revoluciones por minuto  
@@ -95,54 +94,39 @@ void loop() {
       };
       f=0;
    };
-
-
 // Se utiliza un if con el que se enclava el estado del boton de inicio cuando este es oprimido una vez
   if(buttonState or clave==1){
-
 // Se posiciona el cursor en en la columna 0 y fila 0
   lcd.setCursor(0, 0);
 // Se imprime por LCD el mensaje Start para indicar que arranco el sistema  
   lcd.print("Start");
-  
- //Se enclava el estado de inicio    
+//Se enclava el estado de inicio    
   clave=1;
   clave1=0;  
 // Se convierte el valor de PID a un valor entre 0 y 255 para el PWM  
  outmotor=abs(pid)*(255)/(100); 
 // Segun el sentido de giro del motor se envia la señal de PWM por el pin 6 o el pin 5     
    if(pid>0){
-    
     analogWrite(6, outmotor);
     digitalWrite(5, LOW);
     };
    if(pid<0){
-    
     analogWrite(5, outmotor);
     digitalWrite(6, LOW);
     };
-
-
   }
-
 // Se utiliza un if con el que se enclava el estado del boton de parada cuando este es oprimido una vez
   if(buttonState1 or clave1==1){
-    
 // Se posiciona el cursor en en la columna 0 y fila 0
   lcd.setCursor(0, 0);
   lcd.print("Stop");
- 
-    
  //Se enclava el estado de parada    
   clave=0;
   clave1=1; 
 // Se detiene el motor 
   digitalWrite(5, LOW);
   digitalWrite(6, LOW);
-  
   }
-  
-
   delay(1);        // delay
 }
 //Funcion de la interrupcion externa
@@ -173,7 +157,6 @@ void myHandler(){
  ee = ref-rev;  // error actual
  ed = 0;// ee-last;   // error derivativo
  ei=  ee+acu;  // error integral
-
 //Se calcula la señal de control
  pid = (kp*ee) + (ki*ei) + (kd*ed);  // P,I,D terminos
 //Se satura el valor del PID entre 100 y -100
@@ -182,11 +165,6 @@ void myHandler(){
  //Se actualizan las variables del error pasado y el acumulador
  last=ee;
  acu=acu+ee;
- //velocidad(num);
-
- //Serial.println(pos); 
-
-   
    }
    
 
