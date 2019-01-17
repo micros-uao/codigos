@@ -1,6 +1,7 @@
 // Incluir las librerias del LCD y de temporizadores
 #include <LiquidCrystal.h>
 #include <DueTimer.h>
+#include <FreeRTOS_ARM.h>
  
 // Inicializar libreria LCD con sus pines
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
@@ -41,7 +42,8 @@ lcd.begin(16, 2);
 // Se imprime un mensaje por el LCD
 lcd.print("Press");
 
-
+xTaskCreate(salida, NULL,configMINIMAL_STACK_SIZE , NULL, 1, NULL);
+vTaskStartScheduler(); 
   // Se inicializan las entradas digitales
       pinMode(pushButtonStart, INPUT);
       pinMode(pushButtonStop, INPUT);
@@ -76,8 +78,17 @@ lcd.print("Press");
        digitalWrite(3, LOW);
        digitalWrite(2, HIGH);   
 }
- 
-void loop() {
+
+
+
+static void salida(void*arg){
+
+portTickType xLastWakeTime;
+xLastWakeTime = xTaskGetTickCount();
+
+  while (1) {     
+
+
 // Se pone el cursor en la columna0 y la fila 1 del lcd  
   lcd.setCursor(0, 1);
 //Se imprime por LCD el numero de revoluciones por minuto  
@@ -134,10 +145,24 @@ void loop() {
   digitalWrite(5, LOW);
   digitalWrite(6, LOW);
   }
-Serial.println("andando");
-  delay(1);        // delay
+                                                                                                                                                                                                                                          
+   Serial.println("andando");
+    vTaskDelayUntil(&xLastWakeTime,(1/portTICK_RATE_MS));
+
+  
+    }
+    
+  }
+
+
+ 
+void loop() {
+
+ 
 
 }
+
+
 //Funcion de la interrupcion externa
 void ServicioBoton() 
    
